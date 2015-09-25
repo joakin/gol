@@ -11,18 +11,21 @@ document.body.appendChild(canvas)
 // setup a retina-scaled canvas
 var app = window.app = createLoop(canvas, { scale: window.devicePixelRatio })
 
-function update (app) {
-  app.width = app.shape[0] * app.scale
-  app.height = app.shape[1] * app.scale
-  var smallDim = Math.min(app.width, app.height)
-  app.cellSize = smallDim / app.board.length
-  app.left = (app.width - smallDim) / 2
-  app.top = (app.height - smallDim) / 2
+function boardSize(app, cellSize = 4 + Math.random()*40) {
+  let dim = Math.min(...app.shape)*app.scale
+  app.cellSize = cellSize
+  return Math.floor(dim/cellSize)
 }
 
-app.board = initial(Math.round(Math.min(...app.shape)*app.scale/10))
+function update (app) {
+  app.dimensions = [app.width, app.height] = app.shape.map((d) => d * app.scale)
+  var smallDim = Math.min(...app.dimensions)
+  app.margins = [app.left, app.top] = app.dimensions.map((d) => (d - smallDim) / 2)
+}
 
+app.board = initial(boardSize(app, 10))
 update(app)
+
 // start rendering
 app.start()
 
@@ -38,6 +41,6 @@ app.on('resize', function() {
 })
 
 canvas.addEventListener('click', function() {
-  app.board = initial()
+  app.board = initial(boardSize(app))
   update(app)
 })
