@@ -11,8 +11,7 @@ document.body.appendChild(canvas)
 // setup a retina-scaled canvas
 var app = createLoop(canvas, { scale: window.devicePixelRatio })
 
-var size = 80
-app.board = initial(size)
+app.board = initial(300)
 
 // start rendering
 app.start()
@@ -32,5 +31,5 @@ app.on('resize', function() {
 })
 
 canvas.addEventListener('click', function() {
-  app.board = initial(size)
+  app.board = initial()
 })
